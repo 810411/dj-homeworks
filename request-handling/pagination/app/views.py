@@ -6,34 +6,31 @@ from django.urls import reverse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.conf import settings
 
-station_list = []
-
-with open(settings.BUS_STATION_CSV, newline='', encoding='cp1251') as file:
-    reader = csv.DictReader(file)
-    for row in reader:
-        station_list.append({
-            'Name': row['Name'],
-            'Street': row['Street'],
-            'District': row['District']
-        })
-
 
 def index(request):
     return redirect(reverse(bus_stations))
 
 
 def bus_stations(request):
-    paginator = Paginator(station_list, 10)
-    page = request.GET.get('page')
+    station_list = []
+    page = 1
 
-    try:
-        content = paginator.page(page)
-    except PageNotAnInteger:
-        content = paginator.page(1)
-        page = 1
-    except EmptyPage:
-        content = paginator.page(paginator.num_pages)
-        page = paginator.num_pages
+    with open(settings.BUS_STATION_CSV, newline='', encoding='cp1251') as file:
+        reader = csv.DictReader(file)
+        for row in reader:
+            station_list.append({
+                'Name': row['Name'],
+                'Street': row['Street'],
+                'District': row['District']
+            })
+
+    paginator = Paginator(station_list, 10)
+    request_page = request.GET.get('page')
+
+    if request_page:
+        page = int(request_page)
+
+    content = paginator.page(page)
 
     prev_page_url = content.has_previous() and ('?'.join([reverse(bus_stations),
                                                           urlencode({'page': content.previous_page_number()})]))

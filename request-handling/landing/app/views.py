@@ -30,8 +30,6 @@ def landing(request):
     if ab_test_arg == 'original':
         counter_show['original'] += 1
 
-        return render_to_response('landing.html')
-
     elif ab_test_arg == 'test':
         counter_show['test'] += 1
 

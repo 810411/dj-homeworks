@@ -17,6 +17,12 @@ class FileList(TemplateView):
         file_info_list = []
         parsed_date = None
 
+        if date:
+            try:
+                parsed_date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
+            except ValueError as e:
+                print(f'Wrong url`s parameter value, {e}')
+
         for filename in os.listdir(FILES_PATH):
             file_path = os.path.join(FILES_PATH, filename)
 
@@ -25,17 +31,12 @@ class FileList(TemplateView):
                 'ctime': datetime.datetime.fromtimestamp(os.stat(file_path).st_ctime),
                 'mtime': datetime.datetime.fromtimestamp(os.stat(file_path).st_mtime)
             }
-            file_info_list.append(file_info)
 
-        if date:
-            date_array = date.split('-')
-
-            try:
-                parsed_date = datetime.date(int(date_array[0]), int(date_array[1]), int(date_array[2]))
-            except ValueError as e:
-                print(f'Wrong url`s parameter value, {e}')
-
-            file_info_list = filter(lambda x: x['ctime'].date() == parsed_date, file_info_list)
+            if parsed_date:
+                if parsed_date == file_info['ctime'].date() or file_info['mtime'].date():
+                    file_info_list.append(file_info)
+            else:
+                file_info_list.append(file_info)
 
         return {
             'files': file_info_list,
