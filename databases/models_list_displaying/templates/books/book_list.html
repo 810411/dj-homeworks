@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load static %}
-
 {% block title %}Каталог книг{% endblock %}
 {% block content %}
     <div class="container">
@@ -8,15 +7,24 @@
             <h1><a href="/books">Каталог</a></h1>
         </div>
         <div class="row">
-            <div class="book col-md-4">
-                <h2>Сияние</h2>
-                <p>Автор: Стивен Кинг</p>
-                <p>Дата публикации: 2018-09-10</p>
+            {% for book in books %}
+                <div class="book col-md-4 mb-3">
+                <h2><a href="/books/{{ book.pub_date|date:"Y-m-d" }}">{{ book.name }}</a></h2>
+                <p>Автор: {{ book.author }}</p>
+                <p>Дата публикации: {{ book.pub_date|date:"Y-m-d" }}</p>
             </div>
-            <div class="book col-md-4">
-                <h2>1984</h2>
-                <p>Автор: Джордж Оруэл</p>
-                <p>Дата публикации: 2015-03-11</p>
+            {% endfor %}
+        </div>
+        <div class="row">
+            <div class="col-2">
+                {% if prev %}
+                    <a href="/books/{{ prev|date:"Y-m-d" }}"> < {{ prev|date:"Y-m-d" }} </a>
+                {% endif %}
+            </div>
+            <div class="col-2">
+                {% if next %}
+                    <a href="/books/{{ next|date:"Y-m-d" }}"> {{ next|date:"Y-m-d" }} > </a>
+                {% endif %}
             </div>
         </div>
     </div>

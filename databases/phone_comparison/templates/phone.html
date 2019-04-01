@@ -1,0 +1,24 @@
+<div class="col">
+    <p><strong>{{ phone.name }}</strong></p>
+    <p>{{ phone.price }}р.</p>
+    <p>{{ phone.os }}</p>
+    <p>{{ phone.ram }}</p>
+    <p>{{ phone.ppi }}</p>
+    <p>
+        {% if phone.double_camera %}
+            Есть
+        {% else %}
+            -
+        {% endif %}
+    </p>
+    <p>{{ phone.processor }}</p>
+    <p>{{ phone.display }}</p>
+    <p>
+        {% if phone.radio %}
+            Есть
+        {% else %}
+            -
+        {% endif %}
+    </p>
+    {{ phone.manufacturer.additionally|linebreaks }}
+</div>

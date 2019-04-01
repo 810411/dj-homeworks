@@ -7,5 +7,24 @@
         <div class="header">
             <h1>Сравнение телефонов</h1>
         </div>
+        <div class="section">
+            <div class="row">
+                <div class="col">
+                    <p>Модель</p>
+                    <p>Стоимость</p>
+                    <p>Операционая система</p>
+                    <p>Оперативная память</p>
+                    <p>Число пикселей на дюйм</p>
+                    <p>Двойная камера</p>
+                    <p>Процессор</p>
+                    <p>Разрешение экрана</p>
+                    <p>FM-Радио</p>
+                    <p>Дополнительно</p>
+                </div>
+                {% for phone in phones %}
+                    {% include "phone.html" with phone=phone %}
+                {% endfor %}
+            </div>
+        </div>
     </div>
 {% endblock %}
