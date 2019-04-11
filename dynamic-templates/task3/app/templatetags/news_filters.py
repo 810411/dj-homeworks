@@ -75,6 +75,6 @@ def format_selftext(value, count):
     selftext_words = value.split()
 
     if len(selftext_words) > count * 2 + 1:
-        return f'{" ".join(selftext_words[0: count])} ... {" ".join(selftext_words[-count:])}'
+        return '{} ... {}'.format(" ".join(selftext_words[0: count]), " ".join(selftext_words[-count:]))
 
     return value

@@ -39,7 +39,7 @@
                                     {% elif key|lower != 'год' %}
                                         class="{{ value|color }}"
                                     {% endif %}>
-                                    {{ value|crossout }}
+                                    {{ value|default:'-' }}
                                 </td>
                             {% endfor %}
                         </tr>

@@ -1,12 +1,8 @@
 {% extends "app/base.html" %}
 {% block title %}О проекте{% endblock title %}
 {% block content %}
-    <div class="row">
-      <div class="col s12">
-        <h1 class="col s12">Каталог компьютеров Apple</h1>
-        {% for item in items %}
-          {% include "app/computer.html" with computer=item %}
-        {% endfor %}
-      </div>
-    </div>
+    <h1 class="col s12">Каталог компьютеров Apple</h1>
+    {% for item in items %}
+        {% include "app/computer.html" with computer=item %}
+    {% endfor %}
 {% endblock content %}
