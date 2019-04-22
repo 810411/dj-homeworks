@@ -1,20 +1,23 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.http import HttpResponseForbidden
 
 from .forms import ProfileRegisterForm
 from .models import Article
 
+from django.views.defaults import permission_denied
 
 def show_articles(request):
     is_logged = request.user.is_authenticated
     has_subscription = False
-    articles = Article.objects.filter(by_subscription=False).values('pk', 'title')
 
     if is_logged:
         has_subscription = request.user.has_subscription
 
-        if has_subscription:
-            articles = Article.objects.all().values('pk', 'title')
+    articles = Article.objects.values('pk', 'title')
+
+    if not has_subscription:
+        articles = articles.filter(by_subscription=False)
 
     context = {
         'articles': articles,
@@ -44,12 +47,15 @@ def show_article(request, id):
 
 
 def subscribe(request):
-    user = request.user
+    if request.method == 'POST':
+        user = request.user
 
-    user.has_subscription = True
-    user.save()
+        user.has_subscription = True
+        user.save()
 
-    return redirect(reverse('articles'))
+        return redirect(reverse('articles'))
+
+    return HttpResponseForbidden('<h1>403: METHOD NOT ALLOWED</h1>', content_type='text/html')
 
 
 def signup(request):

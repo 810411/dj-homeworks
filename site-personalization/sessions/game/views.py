@@ -16,10 +16,10 @@ def show_home(request):
     else:
         player = Player.objects.get(pk=player_pk)
 
-    game = Game.objects.order_by('id').last()
+    game = Game.objects.order_by('-id').first()
 
     if game is not None and game.is_ended:
-        player_game_info = PlayerGameInfo.objects.filter(game=game).exclude(player=player)[0]
+        player_game_info = PlayerGameInfo.objects.filter(game=game).exclude(player=player).first()
 
         if player_game_info is not None:
             counter = player_game_info.counter
@@ -32,13 +32,14 @@ def show_home(request):
         game.save()
         PlayerGameInfo.objects.create(player=player, game=game, is_master=True)
 
-    if PlayerGameInfo.objects.get_or_create(player=player, game=game)[0].is_master:
+    player_game_info = PlayerGameInfo.objects.get_or_create(player=player, game=game)[0]
+
+    if player_game_info.is_master:
         context['is_master'] = True
         context['number_message'] = f'Загаданное число: {game.number}'
         context['message'] = 'Второй игрок будет пытаться отгадать его'
 
     else:
-        player_game_info = PlayerGameInfo.objects.get_or_create(player=player, game=game)[0]
         context['form'] = ChooseNumberForm()
 
         if request.method == 'POST':
